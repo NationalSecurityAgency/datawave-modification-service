@@ -17,11 +17,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-@EnableScheduling
 @EnableConfigurationProperties({ModificationQueryProperties.class, ModificationDataProperties.class, ModificationHandlerProperties.class})
 @ImportResource(locations = {"${datawave.modification.data.xmlBeansPath:classpath:ModificationServices.xml}"})
 public class ModificationServiceConfiguration {
@@ -38,12 +36,6 @@ public class ModificationServiceConfiguration {
     public ModificationQueryService.ModificationQueryServiceFactory modificationQueryServiceFactory(ModificationQueryProperties modificationProperties,
                     WebClient.Builder webClientBuilder, JWTTokenHandler jwtTokenHandler, DnUtils dnUtils) {
         return new RemoteQueryService.RemoteQueryServiceFactory(modificationProperties, webClientBuilder, jwtTokenHandler, dnUtils);
-    }
-    
-    @Bean
-    @ConditionalOnMissingBean
-    public ModificationCache modificationCache(AccumuloConnectionFactory connectionFactory, ModificationConfiguration modificationConfiguration) {
-        return new ModificationCache(connectionFactory, modificationConfiguration);
     }
     
     @Bean
