@@ -3,11 +3,9 @@ package datawave.microservice.modification;
 import com.codahale.metrics.annotation.Timed;
 import datawave.microservice.authorization.user.ProxiedUserDetails;
 import datawave.modification.ModificationService;
-import datawave.modification.configuration.ModificationConfiguration;
 import datawave.webservice.modification.ModificationRequestBase;
 import datawave.webservice.result.VoidResponse;
 import datawave.webservice.results.modification.ModificationConfigurationResponse;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,9 +20,8 @@ import java.util.List;
 import static datawave.microservice.http.converter.protostuff.ProtostuffHttpMessageConverter.PROTOSTUFF_VALUE;
 
 @RestController
-@RequestMapping(path = "/data/v1", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE, PROTOSTUFF_VALUE,
-        MediaType.TEXT_HTML_VALUE, "text/x-yaml", "application/x-yaml"})
-@EnableConfigurationProperties(ModificationConfiguration.class)
+@RequestMapping(path = "/modification/v1", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE,
+        PROTOSTUFF_VALUE, MediaType.TEXT_HTML_VALUE, "text/x-yaml", "application/x-yaml"})
 public class ModificationController {
     
     private final ModificationService service;

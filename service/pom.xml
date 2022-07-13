@@ -4,8 +4,8 @@
     <parent>
         <groupId>gov.nsa.datawave.microservice</groupId>
         <artifactId>datawave-microservice-service-parent</artifactId>
-        <version>1.7.1</version>
-        <relativePath />
+        <version>2.1-SNAPSHOT</version>
+        <relativePath>../../../microservice-service-parent/pom.xml</relativePath>
     </parent>
     <artifactId>modification-service</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -19,11 +19,11 @@
     </scm>
     <properties>
         <start-class>datawave.microservice.modification.ModificationService</start-class>
-        <version.accumulo>1.10.2</version.accumulo>
         <version.datawave>3.28.0-SNAPSHOT</version.datawave>
         <version.in-memory-accumulo>1.10.3-SNAPSHOT</version.in-memory-accumulo>
         <version.microservice.modification-api>1.0-SNAPSHOT</version.microservice.modification-api>
-        <version.microservice.starter-query>1.0-SNAPSHOT</version.microservice.starter-query>
+        <version.microservice.starter-metadata>1.0-SNAPSHOT</version.microservice.starter-metadata>
+        <version.zookeeper>3.6.3</version.zookeeper>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -47,6 +47,14 @@
                 <version>${version.datawave}</version>
                 <exclusions>
                     <exclusion>
+                        <artifactId>javax.servlet-api</artifactId>
+                        <groupId>javax.servlet</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>servlet-api</artifactId>
+                        <groupId>javax.servlet</groupId>
+                    </exclusion>
+                    <exclusion>
                         <artifactId>log4j</artifactId>
                         <groupId>log4j</groupId>
                     </exclusion>
@@ -60,6 +68,60 @@
                 <groupId>gov.nsa.datawave.core</groupId>
                 <artifactId>datawave-core-modification</artifactId>
                 <version>${version.datawave}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>javax.servlet-api</artifactId>
+                        <groupId>javax.servlet</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.apache.zookeeper</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.eclipse.jetty</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.jboss.resteasy</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.jboss.spec.javax.annotation</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.jboss.spec.javax.ejb</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.jboss.spec.javax.interceptor</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.jboss.spec.javax.servlet</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>org.jboss.logging</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jsp-api</artifactId>
+                        <groupId>javax.servlet.jsp</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>log4j</artifactId>
+                        <groupId>log4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>*</artifactId>
+                        <groupId>junit</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>gov.nsa.datawave.microservice</groupId>
@@ -68,22 +130,30 @@
             </dependency>
             <dependency>
                 <groupId>gov.nsa.datawave.microservice</groupId>
-                <artifactId>spring-boot-starter-datawave-query</artifactId>
-                <version>${version.microservice.starter-query}</version>
+                <artifactId>spring-boot-starter-datawave-metadata</artifactId>
+                <version>${version.microservice.starter-metadata}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${version.zookeeper}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>slf4j-log4j12</artifactId>
+                        <groupId>org.slf4j</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>log4j</artifactId>
+                        <groupId>log4j</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>gov.nsa.datawave.microservice</groupId>
-                <artifactId>spring-boot-starter-datawave-query</artifactId>
-                <version>${version.microservice.starter-query}</version>
+                <artifactId>spring-boot-starter-datawave-metadata</artifactId>
+                <version>${version.microservice.starter-metadata}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>gov.nsa.datawave.microservice</groupId>
-                <artifactId>spring-boot-starter-datawave-query</artifactId>
-                <version>${version.microservice.starter-query}</version>
-                <type>test-jar</type>
-                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -110,7 +180,12 @@
         </dependency>
         <dependency>
             <groupId>gov.nsa.datawave.microservice</groupId>
-            <artifactId>spring-boot-starter-datawave-query</artifactId>
+            <artifactId>spring-boot-starter-datawave-metadata</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     <repositories>
