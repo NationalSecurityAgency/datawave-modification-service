@@ -17,33 +17,16 @@ import java.util.concurrent.TimeUnit;
 public class ModificationQueryProperties {
     
     @NotBlank
-    private String queryHost;
-    
-    @Positive
-    private int queryPort;
+    private String queryPool;
     
     @NotBlank
-    private String queryPool;
+    private String queryURI;
     
     @Positive
     protected long remoteQueryTimeout = 1L;
     
     @NotNull
     protected TimeUnit remoteQueryTimeUnit = TimeUnit.MINUTES;
-    
-    @NotBlank
-    private String authHost;
-    
-    @Positive
-    private int authPort;
-    
-    public String getQueryServiceUri() {
-        return "https://" + queryHost + ':' + queryPort + '/';
-    }
-    
-    public String getAuthServiceUri() {
-        return "https://" + authHost + ':' + authPort + '/';
-    }
     
     public long getRemoteQueryTimeoutMillis() {
         return remoteQueryTimeUnit.toMillis(remoteQueryTimeout);

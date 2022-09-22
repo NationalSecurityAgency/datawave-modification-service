@@ -30,7 +30,6 @@ public class RemoteQueryService implements ModificationQueryService {
     
     private final ModificationQueryProperties modificationProperties;
     private final WebClient webClient;
-    private final WebClient authWebClient;
     private final JWTTokenHandler jwtTokenHandler;
     
     private final ProxiedUserDetails userDetails;
@@ -59,9 +58,12 @@ public class RemoteQueryService implements ModificationQueryService {
     public RemoteQueryService(ModificationQueryProperties modificationProperties, WebClient.Builder webClientBuilder, JWTTokenHandler jwtTokenHandler,
                     DnUtils dnUtils, ProxiedUserDetails user) {
         this.modificationProperties = modificationProperties;
-        this.webClient = webClientBuilder.baseUrl(modificationProperties.getQueryServiceUri()).build();
+        String uri = modificationProperties.getQueryURI();
+        if (!uri.endsWith("/")) {
+            uri = uri + '/';
+        }
+        this.webClient = webClientBuilder.baseUrl(uri).build();
         this.jwtTokenHandler = jwtTokenHandler;
-        this.authWebClient = webClientBuilder.baseUrl(modificationProperties.getAuthServiceUri()).build();
         this.userDetails = user;
     }
     
@@ -81,20 +83,18 @@ public class RemoteQueryService implements ModificationQueryService {
             
             String beginDate = DefaultQueryParameters.formatDate(params.getBeginDate());
             String endDate = DefaultQueryParameters.formatDate(params.getEndDate());
+            String expirationDate = DefaultQueryParameters.formatDate(params.getExpirationDate());
             
-            return webClient.post()
-                            .uri(uriBuilder -> uriBuilder.path(logicName + "/create")
-                                            .queryParam(QueryParameters.QUERY_POOL, modificationProperties.getQueryPool())
-                                            .queryParam(QueryParameters.QUERY_BEGIN, beginDate).queryParam(QueryParameters.QUERY_END, endDate)
-                                            .queryParam(QueryParameters.QUERY_LOGIC_NAME, logicName).queryParam(QueryParameters.QUERY_STRING, params.getQuery())
-                                            .queryParam(QueryParameters.QUERY_NAME, params.getQueryName())
-                                            .queryParam(QueryParameters.QUERY_VISIBILITY, params.getVisibility())
-                                            .queryParam(QueryParameters.QUERY_AUTHORIZATIONS, String.join(",", userAuths))
-                                            .queryParam(QueryParameters.QUERY_EXPIRATION, params.getExpirationDate())
-                                            .queryParam(QueryParameters.QUERY_PAGESIZE, params.getPagesize())
-                                            .queryParam(QueryParameters.QUERY_PERSISTENCE, params.getPersistenceMode())
-                                            .queryParam(QueryParameters.QUERY_TRACE, params.isTrace())
-                                            .queryParam(QueryParameters.QUERY_PARAMS, paramsToMap.get(QueryParameters.QUERY_PARAMS)).build())
+            return webClient.post().uri(uriBuilder -> uriBuilder.path(logicName + "/create")
+                            .queryParam(QueryParameters.QUERY_POOL, modificationProperties.getQueryPool()).queryParam(QueryParameters.QUERY_BEGIN, beginDate)
+                            .queryParam(QueryParameters.QUERY_END, endDate).queryParam(QueryParameters.QUERY_LOGIC_NAME, logicName)
+                            .queryParam(QueryParameters.QUERY_STRING, params.getQuery()).queryParam(QueryParameters.QUERY_NAME, params.getQueryName())
+                            .queryParam(QueryParameters.QUERY_VISIBILITY, params.getVisibility())
+                            .queryParam(QueryParameters.QUERY_AUTHORIZATIONS, String.join(",", userAuths))
+                            .queryParam(QueryParameters.QUERY_EXPIRATION, expirationDate).queryParam(QueryParameters.QUERY_PAGESIZE, params.getPagesize())
+                            .queryParam(QueryParameters.QUERY_PERSISTENCE, params.getPersistenceMode())
+                            .queryParam(QueryParameters.QUERY_TRACE, params.isTrace())
+                            .queryParam(QueryParameters.QUERY_PARAMS, paramsToMap.get(QueryParameters.QUERY_PARAMS)).build())
                             .header("Authorization", bearerHeader).header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).retrieve()
                             .bodyToMono(GenericResponse.class).block(Duration.ofMillis(modificationProperties.getRemoteQueryTimeoutMillis()));
             // @formatter:on

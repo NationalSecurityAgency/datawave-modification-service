@@ -10,9 +10,9 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -60,9 +60,10 @@ public class ModificationController {
      * @HTTP 401 if user does not have correct roles
      * @HTTP 500 error starting the job
      */
-    @PostMapping(path = "/{serviceName}/submit", consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(path = "/{modificationServiceName}/submit",
+                    consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @Timed(name = "dw.modification.data.submit", absolute = true)
-    public VoidResponse submit(@PathVariable String modificationServiceName, @RequestParam("request") ModificationRequestBase request,
+    public VoidResponse submit(@PathVariable String modificationServiceName, @RequestBody(required = true) ModificationRequestBase request,
                     @AuthenticationPrincipal ProxiedUserDetails currentUser) {
         return service.submit(currentUser.getProxiedUsers(), modificationServiceName, request);
     }
