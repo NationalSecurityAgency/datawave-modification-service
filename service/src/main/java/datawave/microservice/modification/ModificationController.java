@@ -4,8 +4,17 @@ import com.codahale.metrics.annotation.Timed;
 import datawave.microservice.authorization.user.ProxiedUserDetails;
 import datawave.modification.ModificationService;
 import datawave.webservice.modification.ModificationRequestBase;
+import datawave.webservice.result.GenericResponse;
 import datawave.webservice.result.VoidResponse;
 import datawave.webservice.results.modification.ModificationConfigurationResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +27,19 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static datawave.microservice.http.converter.protostuff.ProtostuffHttpMessageConverter.PROTOSTUFF_VALUE;
+import static datawave.microservice.query.QueryParameters.QUERY_AUTHORIZATIONS;
+import static datawave.microservice.query.QueryParameters.QUERY_BEGIN;
+import static datawave.microservice.query.QueryParameters.QUERY_END;
+import static datawave.microservice.query.QueryParameters.QUERY_MAX_CONCURRENT_TASKS;
+import static datawave.microservice.query.QueryParameters.QUERY_MAX_RESULTS_OVERRIDE;
+import static datawave.microservice.query.QueryParameters.QUERY_NAME;
+import static datawave.microservice.query.QueryParameters.QUERY_PAGESIZE;
+import static datawave.microservice.query.QueryParameters.QUERY_PAGETIMEOUT;
+import static datawave.microservice.query.QueryParameters.QUERY_PARAMS;
+import static datawave.microservice.query.QueryParameters.QUERY_POOL;
+import static datawave.microservice.query.QueryParameters.QUERY_STRING;
+import static datawave.microservice.query.QueryParameters.QUERY_VISIBILITY;
+import static datawave.query.QueryParameters.QUERY_SYNTAX;
 
 @RestController
 @RequestMapping(path = "/v1", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE, PROTOSTUFF_VALUE,
@@ -33,11 +55,29 @@ public class ModificationController {
     /**
      * Returns a list of the Modification service names and their configurations
      *
-     * @return datawave.webservice.results.modification.ModificationConfigurationResponse
+     * @return List&ltkdatawave.webservice.results.modification.ModificationConfigurationResponse>&gt;
      * @RequestHeader X-ProxiedEntitiesChain use when proxying request for user
      * @RequestHeader X-ProxiedIssuersChain required when using X-ProxiedEntitiesChain, specify one issuer DN per subject DN listed in X-ProxiedEntitiesChain
      * @ResponseHeader X-OperationTimeInMS time spent on the server performing the operation, does not account for network or result serialization
      */
+    // @formatter:off
+    @Operation(
+            summary = "Return a list of the modification service configurations",
+            description = "Returns a list of ModificationConfigurationResponse which contains the modification service configurations.")
+    @ApiResponses({
+            @ApiResponse(
+                    description = "if successful, returns a list of ModificationConfigurationResponse containing service configurations",
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = ModificationConfigurationResponse.class))),
+            @ApiResponse(
+                    description = "if the user doesn't have access to this call",
+                    responseCode = "401",
+                    content = @Content(schema = @Schema(implementation = VoidResponse.class))),
+            @ApiResponse(
+                    description = "if there is an unknown error",
+                    responseCode = "500",
+                    content = @Content(schema = @Schema(implementation = VoidResponse.class)))})
+    // @formatter:on
     @GetMapping("/listConfigurations")
     @Timed(name = "dw.modification.list.configurations", absolute = true)
     public List<ModificationConfigurationResponse> listConfigurations() {
@@ -60,6 +100,25 @@ public class ModificationController {
      * @HTTP 401 if user does not have correct roles
      * @HTTP 500 error starting the job
      */
+    // @formatter:off
+    @Operation(
+            summary = "Submit a modification service request",
+            description = "Submit a modification service request.<br>" +
+                          "")
+    @ApiResponses({
+            @ApiResponse(
+                    description = "if successful, returns a list of ModificationConfigurationResponse containing service configurations",
+                    responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = ModificationConfigurationResponse.class))),
+            @ApiResponse(
+                    description = "if the user doesn't have access to this call",
+                    responseCode = "401",
+                    content = @Content(schema = @Schema(implementation = VoidResponse.class))),
+            @ApiResponse(
+                    description = "if there is an unknown error",
+                    responseCode = "500",
+                    content = @Content(schema = @Schema(implementation = VoidResponse.class)))})
+    // @formatter:on
     @PutMapping(path = "/{modificationServiceName}/submit",
                     consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @Timed(name = "dw.modification.data.submit", absolute = true)
