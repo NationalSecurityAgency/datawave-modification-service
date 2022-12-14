@@ -55,7 +55,7 @@ public class ModificationController {
     /**
      * Returns a list of the Modification service names and their configurations
      *
-     * @return List&ltkdatawave.webservice.results.modification.ModificationConfigurationResponse>&gt;
+     * @return List&lt;kdatawave.webservice.results.modification.ModificationConfigurationResponse&gt;
      * @RequestHeader X-ProxiedEntitiesChain use when proxying request for user
      * @RequestHeader X-ProxiedIssuersChain required when using X-ProxiedEntitiesChain, specify one issuer DN per subject DN listed in X-ProxiedEntitiesChain
      * @ResponseHeader X-OperationTimeInMS time spent on the server performing the operation, does not account for network or result serialization
