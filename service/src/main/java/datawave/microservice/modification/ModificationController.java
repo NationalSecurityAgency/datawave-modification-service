@@ -1,16 +1,12 @@
 package datawave.microservice.modification;
 
 import com.codahale.metrics.annotation.Timed;
-import datawave.microservice.authorization.user.ProxiedUserDetails;
+import datawave.microservice.authorization.user.DatawaveUserDetails;
 import datawave.modification.ModificationService;
 import datawave.webservice.modification.ModificationRequestBase;
-import datawave.webservice.result.GenericResponse;
 import datawave.webservice.result.VoidResponse;
 import datawave.webservice.results.modification.ModificationConfigurationResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,19 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static datawave.microservice.http.converter.protostuff.ProtostuffHttpMessageConverter.PROTOSTUFF_VALUE;
-import static datawave.microservice.query.QueryParameters.QUERY_AUTHORIZATIONS;
-import static datawave.microservice.query.QueryParameters.QUERY_BEGIN;
-import static datawave.microservice.query.QueryParameters.QUERY_END;
-import static datawave.microservice.query.QueryParameters.QUERY_MAX_CONCURRENT_TASKS;
-import static datawave.microservice.query.QueryParameters.QUERY_MAX_RESULTS_OVERRIDE;
-import static datawave.microservice.query.QueryParameters.QUERY_NAME;
-import static datawave.microservice.query.QueryParameters.QUERY_PAGESIZE;
-import static datawave.microservice.query.QueryParameters.QUERY_PAGETIMEOUT;
-import static datawave.microservice.query.QueryParameters.QUERY_PARAMS;
-import static datawave.microservice.query.QueryParameters.QUERY_POOL;
-import static datawave.microservice.query.QueryParameters.QUERY_STRING;
-import static datawave.microservice.query.QueryParameters.QUERY_VISIBILITY;
-import static datawave.query.QueryParameters.QUERY_SYNTAX;
 
 @RestController
 @RequestMapping(path = "/v1", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE, PROTOSTUFF_VALUE,
@@ -123,7 +106,7 @@ public class ModificationController {
                     consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.TEXT_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     @Timed(name = "dw.modification.data.submit", absolute = true)
     public VoidResponse submit(@PathVariable String modificationServiceName, @RequestBody(required = true) ModificationRequestBase request,
-                    @AuthenticationPrincipal ProxiedUserDetails currentUser) {
+                    @AuthenticationPrincipal DatawaveUserDetails currentUser) {
         return service.submit(currentUser.getProxiedUsers(), modificationServiceName, request);
     }
     

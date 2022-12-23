@@ -1,6 +1,6 @@
 package datawave.microservice.modification.query;
 
-import datawave.microservice.authorization.user.ProxiedUserDetails;
+import datawave.microservice.authorization.user.DatawaveUserDetails;
 import datawave.microservice.modification.config.ModificationQueryProperties;
 import datawave.microservice.query.DefaultQueryParameters;
 import datawave.microservice.query.QueryParameters;
@@ -32,7 +32,7 @@ public class RemoteQueryService implements ModificationQueryService {
     private final WebClient webClient;
     private final JWTTokenHandler jwtTokenHandler;
     
-    private final ProxiedUserDetails userDetails;
+    private final DatawaveUserDetails userDetails;
     
     public static class RemoteQueryServiceFactory implements ModificationQueryServiceFactory {
         private final ModificationQueryProperties modificationProperties;
@@ -50,13 +50,13 @@ public class RemoteQueryService implements ModificationQueryService {
         
         @Override
         public ModificationQueryService createService(Collection<? extends DatawaveUser> proxiedUsers) {
-            ProxiedUserDetails user = new ProxiedUserDetails(proxiedUsers, System.currentTimeMillis());
+            DatawaveUserDetails user = new DatawaveUserDetails(proxiedUsers, System.currentTimeMillis());
             return new RemoteQueryService(modificationProperties, webClientBuilder, jwtTokenHandler, dnUtils, user);
         }
     }
     
     public RemoteQueryService(ModificationQueryProperties modificationProperties, WebClient.Builder webClientBuilder, JWTTokenHandler jwtTokenHandler,
-                    DnUtils dnUtils, ProxiedUserDetails user) {
+                    DnUtils dnUtils, DatawaveUserDetails user) {
         this.modificationProperties = modificationProperties;
         String uri = modificationProperties.getQueryURI();
         if (!uri.endsWith("/")) {
