@@ -1,5 +1,18 @@
 package datawave.microservice.modification.query;
 
+import java.text.ParseException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.http.HttpHeaders;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import datawave.microservice.authorization.user.DatawaveUserDetails;
 import datawave.microservice.modification.config.ModificationQueryProperties;
 import datawave.microservice.query.DefaultQueryParameters;
@@ -12,18 +25,6 @@ import datawave.security.authorization.JWTTokenHandler;
 import datawave.webservice.result.BaseQueryResponse;
 import datawave.webservice.result.GenericResponse;
 import datawave.webservice.result.VoidResponse;
-import org.apache.http.HttpHeaders;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.text.ParseException;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 public class RemoteQueryService implements ModificationQueryService {
     private static final Logger log = LoggerFactory.getLogger(RemoteQueryService.class);
