@@ -13,15 +13,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import datawave.microservice.authorization.user.DatawaveUserDetails;
 import datawave.microservice.modification.config.ModificationQueryProperties;
 import datawave.microservice.query.DefaultQueryParameters;
 import datawave.microservice.query.QueryParameters;
-import datawave.microservice.security.util.DnUtils;
 import datawave.modification.query.ModificationQueryService;
 import datawave.query.exceptions.DatawaveQueryException;
-import datawave.security.authorization.DatawaveUser;
 import datawave.security.authorization.JWTTokenHandler;
+import datawave.security.authorization.ProxiedUserDetails;
 import datawave.webservice.result.BaseQueryResponse;
 import datawave.webservice.result.GenericResponse;
 import datawave.webservice.result.VoidResponse;
@@ -33,31 +31,28 @@ public class RemoteQueryService implements ModificationQueryService {
     private final WebClient webClient;
     private final JWTTokenHandler jwtTokenHandler;
     
-    private final DatawaveUserDetails userDetails;
+    private final ProxiedUserDetails userDetails;
     
     public static class RemoteQueryServiceFactory implements ModificationQueryServiceFactory {
         private final ModificationQueryProperties modificationProperties;
         private final WebClient.Builder webClientBuilder;
         private final JWTTokenHandler jwtTokenHandler;
-        private final DnUtils dnUtils;
         
         public RemoteQueryServiceFactory(ModificationQueryProperties modificationProperties, WebClient.Builder webClientBuilder,
-                        JWTTokenHandler jwtTokenHandler, DnUtils dnUtils) {
+                        JWTTokenHandler jwtTokenHandler) {
             this.modificationProperties = modificationProperties;
             this.webClientBuilder = webClientBuilder;
             this.jwtTokenHandler = jwtTokenHandler;
-            this.dnUtils = dnUtils;
         }
         
         @Override
-        public ModificationQueryService createService(Collection<? extends DatawaveUser> proxiedUsers) {
-            DatawaveUserDetails user = new DatawaveUserDetails(proxiedUsers, System.currentTimeMillis());
-            return new RemoteQueryService(modificationProperties, webClientBuilder, jwtTokenHandler, dnUtils, user);
+        public ModificationQueryService createService(ProxiedUserDetails userDetails) {
+            return new RemoteQueryService(modificationProperties, webClientBuilder, jwtTokenHandler, userDetails);
         }
     }
     
     public RemoteQueryService(ModificationQueryProperties modificationProperties, WebClient.Builder webClientBuilder, JWTTokenHandler jwtTokenHandler,
-                    DnUtils dnUtils, DatawaveUserDetails user) {
+                    ProxiedUserDetails user) {
         this.modificationProperties = modificationProperties;
         String uri = modificationProperties.getQueryURI();
         if (!uri.endsWith("/")) {

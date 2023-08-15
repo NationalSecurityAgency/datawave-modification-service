@@ -13,7 +13,6 @@ import datawave.core.common.connection.AccumuloConnectionFactory;
 import datawave.core.common.connection.AccumuloConnectionFactoryImpl;
 import datawave.core.common.result.ConnectionPoolsProperties;
 import datawave.microservice.modification.query.RemoteQueryService;
-import datawave.microservice.security.util.DnUtils;
 import datawave.modification.ModificationService;
 import datawave.modification.cache.ModificationCache;
 import datawave.modification.configuration.ModificationConfiguration;
@@ -35,8 +34,8 @@ public class ModificationServiceConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public ModificationQueryService.ModificationQueryServiceFactory modificationQueryServiceFactory(ModificationQueryProperties modificationProperties,
-                    WebClient.Builder webClientBuilder, JWTTokenHandler jwtTokenHandler, DnUtils dnUtils) {
-        return new RemoteQueryService.RemoteQueryServiceFactory(modificationProperties, webClientBuilder, jwtTokenHandler, dnUtils);
+                    WebClient.Builder webClientBuilder, JWTTokenHandler jwtTokenHandler) {
+        return new RemoteQueryService.RemoteQueryServiceFactory(modificationProperties, webClientBuilder, jwtTokenHandler);
     }
     
     @Bean

@@ -109,7 +109,7 @@ public class ModificationController {
     @Timed(name = "dw.modification.data.submit", absolute = true)
     public VoidResponse submit(@PathVariable String modificationServiceName, @RequestBody(required = true) ModificationRequestBase request,
                     @AuthenticationPrincipal DatawaveUserDetails currentUser) {
-        return service.submit(currentUser.getProxiedUsers(), modificationServiceName, request);
+        return service.submit(currentUser, modificationServiceName, request);
     }
     
 }
