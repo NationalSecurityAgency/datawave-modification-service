@@ -4,7 +4,7 @@
     <parent>
         <groupId>gov.nsa.datawave.microservice</groupId>
         <artifactId>datawave-microservice-service-parent</artifactId>
-        <version>3.1-SNAPSHOT</version>
+        <version>4.0-SNAPSHOT</version>
         <relativePath>../../../microservice-service-parent/pom.xml</relativePath>
     </parent>
     <artifactId>modification-service</artifactId>
@@ -20,9 +20,9 @@
     <properties>
         <start-class>datawave.microservice.modification.ModificationService</start-class>
         <version.datawave>7.0.0-SNAPSHOT</version.datawave>
-        <version.in-memory-accumulo>3.0-SNAPSHOT</version.in-memory-accumulo>
+        <version.in-memory-accumulo>4.0-SNAPSHOT</version.in-memory-accumulo>
         <version.microservice.modification-api>1.0-SNAPSHOT</version.microservice.modification-api>
-        <version.microservice.starter-metadata>2.0-SNAPSHOT</version.microservice.starter-metadata>
+        <version.microservice.starter-metadata>3.0-SNAPSHOT</version.microservice.starter-metadata>
         <version.zookeeper>3.8.0</version.zookeeper>
     </properties>
     <dependencyManagement>
