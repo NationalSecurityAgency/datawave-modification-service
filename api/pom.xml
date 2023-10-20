@@ -4,11 +4,11 @@
     <parent>
         <groupId>gov.nsa.datawave.microservice</groupId>
         <artifactId>datawave-microservice-parent</artifactId>
-        <version>4.0-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
         <relativePath>../../../microservice-parent/pom.xml</relativePath>
     </parent>
     <artifactId>modification-api</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <url>https://code.nsa.gov/datawave-modification-service</url>
     <scm>
         <connection>scm:git:https://github.com/NationalSecurityAgency/datawave-modification-service.git</connection>
@@ -18,7 +18,7 @@
     </scm>
     <properties>
         <version.accumulo>2.1.1</version.accumulo>
-        <version.base-responses>4.0-SNAPSHOT</version.base-responses>
+        <version.base-responses>4.0.0-SNAPSHOT</version.base-responses>
         <version.guava>31.1-jre</version.guava>
     </properties>
     <dependencyManagement>
