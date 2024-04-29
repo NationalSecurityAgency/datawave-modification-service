@@ -28,10 +28,10 @@ public class ModificationQueryProperties {
     protected long remoteQueryTimeout = 1L;
     
     @NotNull
-    protected TimeUnit remoteQueryTimeUnit = TimeUnit.MINUTES;
+    protected TimeUnit remoteQueryTimeoutUnit = TimeUnit.MINUTES;
     
     public long getRemoteQueryTimeoutMillis() {
-        return remoteQueryTimeUnit.toMillis(remoteQueryTimeout);
+        return remoteQueryTimeoutUnit.toMillis(remoteQueryTimeout);
     }
     
 }
