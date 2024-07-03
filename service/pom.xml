@@ -21,8 +21,8 @@
         <start-class>datawave.microservice.modification.ModificationService</start-class>
         <version.datawave>7.0.0</version.datawave>
         <version.in-memory-accumulo>4.0.0</version.in-memory-accumulo>
-        <version.microservice.modification-api>1.0.0</version.microservice.modification-api>
-        <version.microservice.starter-metadata>3.0.0</version.microservice.starter-metadata>
+        <version.modification-api>1.0.0</version.modification-api>
+        <version.starter-metadata>3.0.0</version.starter-metadata>
         <version.zookeeper>3.8.0</version.zookeeper>
     </properties>
     <dependencyManagement>
@@ -126,12 +126,12 @@
             <dependency>
                 <groupId>gov.nsa.datawave.microservice</groupId>
                 <artifactId>modification-api</artifactId>
-                <version>${version.microservice.modification-api}</version>
+                <version>${version.modification-api}</version>
             </dependency>
             <dependency>
                 <groupId>gov.nsa.datawave.microservice</groupId>
                 <artifactId>spring-boot-starter-datawave-metadata</artifactId>
-                <version>${version.microservice.starter-metadata}</version>
+                <version>${version.starter-metadata}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.zookeeper</groupId>
@@ -151,7 +151,7 @@
             <dependency>
                 <groupId>gov.nsa.datawave.microservice</groupId>
                 <artifactId>spring-boot-starter-datawave-metadata</artifactId>
-                <version>${version.microservice.starter-metadata}</version>
+                <version>${version.starter-metadata}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
